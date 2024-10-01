@@ -21,16 +21,10 @@ def gcd(a: int, b: int) -> int:
     return remainder
 
 def multiplicative_inverse(e: int, phi: int) -> int:
-    """
-    Euclid's extended algorithm for finding the multiplicative
-    inverse of two numbers.
-    multiplicative_inverse(7, 40)
-    23
-    """
-    # PUT YOUR CODE HERE
-    pass
-
-
+    for b in range(0, phi):
+        if e * b % phi == 1:
+            return b
+'''
 def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[int, int]]:
     if not (is_prime(p) and is_prime(q)):
         raise ValueError("Both numbers must be prime.")
@@ -83,3 +77,4 @@ if __name__ == "__main__":
     print("Decrypting message with public key ", public, " . . .")
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
+'''
