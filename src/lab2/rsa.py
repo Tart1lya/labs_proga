@@ -12,18 +12,13 @@ def is_prime(n: int) -> bool:
                 flag = False
                 break
         return flag
-'''
-def gcd(a: int, b: int) -> int:
-    """
-    Euclid's algorithm for determining the greatest common divisor.
-    gcd(12, 15)
-    3
-    gcd(3, 7)
-    1
-    """
-    # PUT YOUR CODE HERE
-    pass
 
+def gcd(a: int, b: int) -> int:
+    remainder = 0
+    while max(a, b) % min(a, b) != 0:
+        remainder = max(a, b) % min(a, b)
+        a, b = min(a, b), remainder
+    return remainder
 
 def multiplicative_inverse(e: int, phi: int) -> int:
     """
@@ -41,16 +36,9 @@ def generate_keypair(p: int, q: int) -> tp.Tuple[tp.Tuple[int, int], tp.Tuple[in
         raise ValueError("Both numbers must be prime.")
     elif p == q:
         raise ValueError("p and q cannot be equal")
-
-    # n = pq
-    # PUT YOUR CODE HERE
-
-    # phi = (p-1)(q-1)
-    # PUT YOUR CODE HERE
-
-    # Choose an integer e such that e and phi(n) are coprime
+    n = p * q
+    phi = (p-1) * (q-1)
     e = random.randrange(1, phi)
-    # Use Euclid's Algorithm to verify that e and phi(n) are coprime
     g = gcd(e, phi)
     while g != 1:
         e = random.randrange(1, phi)
@@ -95,4 +83,3 @@ if __name__ == "__main__":
     print("Decrypting message with public key ", public, " . . .")
     print("Your message is:")
     print(decrypt(public, encrypted_msg))
-'''
