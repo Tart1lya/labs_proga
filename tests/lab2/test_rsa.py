@@ -10,3 +10,6 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertEqual(is_prime(1), False)
         self.assertEqual(is_prime(8), False)
 
+    def test_gcd(self):
+        self.assertEqual(gcd(12, 15), 3)
+        self.assertEqual(gcd(3, 7), 1)
