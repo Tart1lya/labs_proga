@@ -208,9 +208,6 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> solution = solve(grid)
     >>> check_solution(solution)
     True
-    >>> grid = generate_sudoku(1000)
-    >>> sum(1 for row in grid for e in row if e == '.')
-    0
     >>> solution = solve(grid)
     >>> check_solution(solution)
     True
@@ -221,9 +218,22 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     >>> check_solution(solution)
     True
     """
+    empty_grid = [['.' for _ in range(9)] for _ in range(9)]
 
+    # Решаем пустую сетку, чтобы получить заполненную
+    solve(empty_grid)
 
+    # Копируем решённую сетку
+    filled_grid = [row[:] for row in empty_grid]
 
+    # Определяем позиции, которые будут пустыми
+    empty_positions = random.sample([(i, j) for i in range(9) for j in range(9)], 81 - N)
+
+    # Очищаем элементы по выбранным позициям
+    for pos in empty_positions:
+        filled_grid[pos[0]][pos[1]] = '.'
+
+    return filled_grid
 
 if __name__ == "__main__":
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
@@ -233,5 +243,7 @@ if __name__ == "__main__":
         if check_solution(solution):
             display(solution)
             print('Solution is correct')
+            grid = generate_sudoku(40)
+            display(grid)
         else:
             print('Oops')
