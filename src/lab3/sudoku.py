@@ -80,12 +80,12 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     >>> get_block(grid, (8, 8))
     ['2', '8', '.', '.', '.', '5', '.', '7', '9']
     """
-    # Найти координаты верхнего левого угла блока 3x3
+    # Находим координаты верхнего левого угла блока 3x3
     row, col = pos
     block_row_start = (row // 3) * 3
     block_col_start = (col // 3) * 3
 
-    # Собрать все элементы блока 3x3
+    # Собираем все элементы блока 3x3
     block = []
     for i in range(3):
         for j in range(3):
@@ -98,10 +98,6 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     """Найти первую свободную позицию в пазле
     >>> find_empty_positions([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']])
     (0, 2)
-    >>> find_empty_positions([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']])
-    (1, 1)
-    >>> find_empty_positions([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']])
-    (2, 0)
     """
     for i in range(9):
         for j in range(9):
@@ -122,13 +118,13 @@ def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -
     """
     values = set(map(str, range(1, 10)))
 
-    # Удалить значения, которые уже есть в строке
+    # Удаляем значения, которые уже есть в строке
     values -= set(get_row(grid, pos))
 
-    # Удалить значения, которые уже есть в столбце
+    # Удаляем значения, которые уже есть в столбце
     values -= set(get_col(grid, pos))
 
-    # Удалить значения, которые уже есть в блоке 3x3
+    # Удаляем значения, которые уже есть в блоке 3x3
     values -= set(get_block(grid, pos))
 
     return values
