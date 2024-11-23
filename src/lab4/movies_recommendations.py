@@ -23,11 +23,11 @@ class RecommendationSystem:
     def __init__(self, movies_file: str, history_file: str):
         """Инициализация системы рекомендаций."""
         # Загрузка данных о фильмах и истории просмотров
-        self.movies = self._load_movies(movies_file)            # Словарь с информацией о фильмах
-        self.user_histories = self._load_user_histories(history_file)  # Список историй пользователей
+        self.movies = self.load_movies(movies_file)            # Словарь с информацией о фильмах
+        self.user_histories = self.load_user_histories(history_file)  # Список историй пользователей
 
     @staticmethod
-    def _load_movies(file_path: str) -> Dict[int, str]:
+    def load_movies(file_path: str) -> Dict[int, str]:
         """
         Загружает список фильмов из файла.
         Возвращает словарь: {id фильма: название фильма}.
@@ -40,7 +40,7 @@ class RecommendationSystem:
         return movies
 
     @staticmethod
-    def _load_user_histories(file_path: str) -> List[UserHistory]:
+    def load_user_histories(file_path: str) -> List[UserHistory]:
         """
         Загружает историю просмотров из файла.
         Возвращает список объектов UserHistory.
@@ -58,15 +58,15 @@ class RecommendationSystem:
         Возвращает название фильма или сообщение, что рекомендаций нет.
         """
         # Шаг 1: Найти похожих пользователей
-        similar_users = self._get_similar_users(user_movies)
+        similar_users = self.get_similar_users(user_movies)
 
         # Шаг 2: Получить рекомендации из фильмов похожих пользователей
-        recommended_movie_id = self._get_recommendations(user_movies, similar_users)
+        recommended_movie_id = self.get_recommendations(user_movies, similar_users)
 
         # Возвращаем название фильма или сообщение, если рекомендаций нет
         return self.movies[recommended_movie_id] if recommended_movie_id else "Нет рекомендаций."
 
-    def _get_similar_users(self, user_movies: List[int]) -> List[UserHistory]:
+    def get_similar_users(self, user_movies: List[int]) -> List[UserHistory]:
         """
         Находит пользователей, которые посмотрели хотя бы половину фильмов из списка заданного пользователя.
         Возвращает отсортированный список похожих пользователей.
@@ -88,7 +88,7 @@ class RecommendationSystem:
         return [user[1] for user in similar_users]  # Возвращаем только объекты UserHistory
 
     @staticmethod
-    def _get_recommendations(user_movies: List[int], similar_users: List[UserHistory]) -> int:
+    def get_recommendations(user_movies: List[int], similar_users: List[UserHistory]) -> int:
         """
         Собирает фильмы из списков похожих пользователей, исключая уже просмотренные.
         Возвращает ID фильма с максимальным количеством рекомендаций.
