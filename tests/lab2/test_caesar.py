@@ -1,6 +1,6 @@
 import unittest
 from src.lab2.caesar import *
-class CalculatorTestCase(unittest.TestCase):
+class CaesarTestCase(unittest.TestCase):
 
     #Шифрование
     def test_encrypt_vigenere(self):
