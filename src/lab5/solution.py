@@ -10,16 +10,13 @@ def is_valid_address(address):
 
 # Функция для обработки и валидации заказов
 def process_orders(file_path):
-    valid_orders = []
-    invalid_orders = []
+    valid_orders = []  # Список валидных заказов
+    invalid_orders = []  # Список невалидных заказов
 
+    # Открываем файл для чтения
     with open(file_path, 'r') as file:
         for line in file:
-            # Пропускаем пустые строки
-            if not line.strip():
-                continue
-
-            # Разделение строки по разделителю
+            # Разделение строки по разделителю ";"
             order = line.strip().split(';')
 
             # Проверяем, что строка имеет 6 элементов
@@ -27,25 +24,26 @@ def process_orders(file_path):
                 continue  # Пропускаем строки с неправильным количеством данных
 
             # Разделяем строку на компоненты
-            order_id = order[0]
-            products = order[1].split(', ')
-            customer_name = order[2]
-            address = order[3]
-            phone = order[4]
-            priority = order[5]
+            order_id = order[0]  # Идентификатор заказа
+            products = order[1].split(', ')  # Список товаров
+            customer_name = order[2]  # Имя клиента
+            address = order[3]  # Адрес доставки
+            phone = order[4]  # Номер телефона
+            priority = order[5]  # Приоритет заказа
 
-            # Проверка ошибок
+            # Проверка валидности адреса и телефона
             if not is_valid_address(address):
                 invalid_orders.append(f"{order_id};1;{address if address else 'no data'}")
             if not is_valid_phone(phone):
                 invalid_orders.append(f"{order_id};2;{phone if phone else 'no data'}")
 
-            # Если заказ без ошибок, сохраняем
+            # Если заказ валиден, добавляем его в список валидных заказов
             if is_valid_address(address) and is_valid_phone(phone):
-                # Форматирование продуктов
+                # Подсчитываем количество каждого товара
                 product_counts = {}
                 for product in products:
                     product_counts[product] = product_counts.get(product, 0) + 1
+                # Форматируем список товаров
                 formatted_products = ', '.join([f"{product} x{count}" for product, count in product_counts.items()])
 
                 # Добавляем заказ в список валидных заказов
@@ -53,39 +51,39 @@ def process_orders(file_path):
 
     return valid_orders, invalid_orders
 
-
-# Функция для сортировки заказов по стране и приоритету
+# Функция для сортировки и сохранения валидных заказов по странам и приоритету
 def save_valid_orders(valid_orders):
     def country_sort_key(order):
-        # Разделение адреса на компоненты и сортировка по стране
+        # Получаем страну из адреса
         country = order[3].split('.')[0].strip()
         if country == "Россия":
-            return (0, order[5])  # "Российская Федерация" на первом месте
-        return (1, country, order[5])  # Для остальных стран сортируем по алфавиту и приоритету
+            return 0, order[5]  # Россия сортируется первой, далее по приоритету
+        return 1, country, order[5]  # Остальные страны сортируются по алфавиту и приоритету
 
-    # Сортируем по ключу, учитывая страну и приоритет
+    # Сортируем валидные заказы по ключу
     valid_orders.sort(key=country_sort_key)
 
+    # Записываем валидные заказы в файл "order_country.txt"
     with open("order_country.txt", "w") as file:
         for order in valid_orders:
-            # Записываем заказ в файл с форматированием адреса
-            file.write(f"{order[0]};{order[1]};{order[2]};{order[3].split('.')[0]}. {order[3].split('.')[1]}. {order[3].split('.')[2]};{order[4]};{order[5]}\n")
+            # Форматируем адрес перед записью в файл
+            file.write(f"{order[0]};{order[1]};{order[2]};"
+                       f"{order[3].split('.')[0]}. {order[3].split('.')[1]}. {order[3].split('.')[2]};"
+                       f"{order[4]};{order[5]}\n")
 
-
-# Функция для записи невалидных заказов в файл
+# Функция для сохранения невалидных заказов в файл "non_valid_orders.txt"
 def save_invalid_orders(invalid_orders):
     with open("non_valid_orders.txt", "w") as file:
         for invalid_order in invalid_orders:
             file.write(invalid_order + "\n")
 
-
-# Основная функция
 def main():
+    # Обрабатываем заказы из файла "orders.txt"
     valid_orders, invalid_orders = process_orders("orders.txt")
 
+    # Сохраняем валидные и невалидные заказы в отдельные файлы
     save_valid_orders(valid_orders)
     save_invalid_orders(invalid_orders)
-
 
 if __name__ == "__main__":
     main()
