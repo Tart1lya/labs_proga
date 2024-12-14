@@ -1,6 +1,6 @@
 import unittest
 from src.lab2.vigenre import *
-class CalculatorTestCase(unittest.TestCase):
+class VigenreTestCase(unittest.TestCase):
 
     #Шифрование
     def test_encrypt_vigenere(self):

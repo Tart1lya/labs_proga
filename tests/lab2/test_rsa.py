@@ -2,7 +2,7 @@ import unittest
 from src.lab2.rsa import *
 
 
-class CalculatorTestCase(unittest.TestCase):
+class RSATestCase(unittest.TestCase):
 
     def test_is_prime(self):
         self.assertEqual(is_prime(2), True)
